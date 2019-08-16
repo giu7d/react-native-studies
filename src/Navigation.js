@@ -3,11 +3,8 @@ import { BottomNavigation, Text } from 'react-native-paper';
 
 // Screens
 import MainScreen from './MainScreen';
-
-
-// Routes
-const AlbumsRoute = () => <Text>Albums</Text>;
-const RecentsRoute = () => <Text>Recents</Text>;
+const AlbumsScreen = () => <Text>Albums</Text>;
+const RecentsScreen = () => <Text>Recents</Text>;
 
 
 export default class Navigation extends Component {
@@ -25,8 +22,8 @@ export default class Navigation extends Component {
 
 	_renderScene = BottomNavigation.SceneMap({
 		main: MainScreen,
-		albums: AlbumsRoute,
-		recents: RecentsRoute,
+		albums: AlbumsScreen,
+		recents: RecentsScreen,
 	});
 
 	render() {
