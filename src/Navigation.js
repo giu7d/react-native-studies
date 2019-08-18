@@ -1,10 +1,11 @@
 import React, { Component } from 'react'; 
+import { View } from 'react-native';
 import { BottomNavigation, Text } from 'react-native-paper';
 
 // Screens
 import MainScreen from './MainScreen';
-const AlbumsScreen = () => <Text>Albums</Text>;
-const RecentsScreen = () => <Text>Recents</Text>;
+const AlbumsScreen = () => <View><Text>Albums</Text></View>;
+const RecentsScreen = () => <View><Text>Recents</Text></View>;
 
 
 export default class Navigation extends Component {
@@ -32,7 +33,13 @@ export default class Navigation extends Component {
 				navigationState={this.state}
 				onIndexChange={this._handleIndexChange}
 				renderScene={this._renderScene}
-				activeColor="#FFFFFF"
+				activeColor="#F73942"
+				shifting={true}
+				barStyle={{
+					elevation: 0,
+					shadowOpacity: 0,
+					borderTopWidth: 0
+				}}
 			/>
 		);
 	}

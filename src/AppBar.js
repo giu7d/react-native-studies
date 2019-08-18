@@ -15,13 +15,17 @@ export default class AppBar extends Component {
 		return (
 			<Appbar.Header>
 					<Appbar.Content
+						color="#333333"
 						title="Title"
+						titleStyle={{fontWeight:'bold'}}
 					/>
 					<Appbar.Action 
+						color="#666666"
 						icon="favorite" 
 						onPress={this._onSearch} 
 					/>
 					<Appbar.Action 
+						color="#666666"
 						icon="more-vert" 
 						onPress={this._onMore} 
 						/>
