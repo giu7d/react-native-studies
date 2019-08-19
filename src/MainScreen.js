@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, Card, FAB } from 'react-native-paper';
-import AmCharts from './AmCharts';
+import { FAB } from 'react-native-paper';
+import GraphCard from './GraphCard';
 
 export default class MainScreen extends Component {
   state = {
+    drilldownCount: 0,
     data: [
       {
         country: "Lithuania",
@@ -42,41 +43,45 @@ export default class MainScreen extends Component {
 
   _pushData = () => {
     const { data } = this.state;
-    const place = {
-      country: `country #${Math.floor(Math.random() * 10)}`,
-      value: Math.floor(Math.random() * 100)
-    }
+
+    const country = `country #${Math.floor(Math.random() * 10)}`;
+    const value = Math.floor(Math.random() * 100);
+    
+    const place = { country, value }
 
     data.push(place);
-
     this.setState({ data });
-  };
+  }
+
+  _update = () => {
+    const { drilldownCount } = this.state;
+
+    this.setState({
+      drilldownCount: drilldownCount+1
+    });
+    
+    this.forceUpdate();
+  }
 
   render() {
+
+    const { data, drilldownCount } = this.state;
+
     return (
       <View style={styles.container}>
         <View>
-          
-          <Card style={{ marginVertical: 24 }} theme={{ colors: { primary: '#333333' }}}>
-            <Card.Title 
-              title="Card Title" 
-              subtitle="Card Subtitle" />
-
-            <Card.Content>
-              <AmCharts data={this.state.data} />
-            </Card.Content>
-            
-            <Card.Actions>
-              <Button icon="remove" onPress={this._popData}>Pop</Button>
-              <Button icon="add" onPress={this._pushData}>Add</Button>
-            </Card.Actions>
-          </Card>
+          <GraphCard 
+            data={data} 
+            drilldownCount={drilldownCount} 
+            push={this._pushData} 
+            pop={this._popData} 
+          />
         </View>
         <FAB
           style={styles.fab}
           small={false}
-          icon="add"
-          onPress={() => console.log('Pressed')}
+          icon="autorenew"
+          onPress={this._update}
         />
       </View>
     );

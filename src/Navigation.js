@@ -13,9 +13,9 @@ export default class Navigation extends Component {
 	state = {
 		index: 0,
 		routes: [
-			{ key: 'main', title: 'Main', icon: 'queue-music' },
-			{ key: 'albums', title: 'Albums', icon: 'album' },
-			{ key: 'recents', title: 'Recents', icon: 'history' },
+			{ key: 'main', title: 'Charts', icon: 'pie-chart' },
+			{ key: 'albums', title: 'Data', icon: 'mood' },
+			{ key: 'recents', title: 'Filters', icon: 'history' },
 		],
 	};
 
