@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { FAB } from 'react-native-paper';
 import GraphCard from './GraphCard';
 
@@ -67,16 +67,31 @@ export default class MainScreen extends Component {
 
     const { data, drilldownCount } = this.state;
 
+    const renderGraph = (size) => {
+      
+      const graphArray = [];
+      
+      for(let i = 0; i < size; i++){
+        graphArray.push(
+          <View key={i}>
+            <GraphCard
+              data={data}
+              drilldownCount={drilldownCount}
+              push={this._pushData}
+              pop={this._popData}
+            />
+          </View>
+        );
+      }
+
+      return graphArray;
+    }
+
     return (
       <View style={styles.container}>
-        <View>
-          <GraphCard 
-            data={data} 
-            drilldownCount={drilldownCount} 
-            push={this._pushData} 
-            pop={this._popData} 
-          />
-        </View>
+        <ScrollView>
+          {renderGraph(10)}
+        </ScrollView>
         <FAB
           style={styles.fab}
           small={false}

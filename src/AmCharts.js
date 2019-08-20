@@ -1,60 +1,58 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { ActivityIndicator } from 'react-native-paper';
 
 export default class AmCharts extends Component {
 
   render() {
 
-    const html = `         
-      <script src="https://www.amcharts.com/lib/4/core.js"></script>
-      <script src="https://www.amcharts.com/lib/4/charts.js"></script>
-      <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+    const style = `
       <style>
         #chartdiv {
           width: 100%;
         }
       </style>
-      <div id="chartdiv"></div>
+    `;
+
+    const imports = `
       <script>
-        /**
-         * ---------------------------------------
-         * This demo was created using amCharts 4.
-         * 
-         * For more information visit:
-         * https://www.amcharts.com/
-         * 
-         * Documentation is available at:
-         * https://www.amcharts.com/docs/v4/
-         * ---------------------------------------
-         */
+        document.getElementById("log").innerHTML = "Imports #" + Math.floor(Math.random() * 100000);      
+      </script>
+      <script src="https://www.amcharts.com/lib/4/core.js"></script>
+      <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+      <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+    `;
+    
+    const script = `
+      <script>
+        // Create chart instance in one go
+        var chart = am4core.createFromConfig({
+          // Create pie series
+          "series": [{
+            "type": "PieSeries",
+            "dataFields": {
+              "value": "value",
+              "category": "country"
+            }
+          }],
 
-        // Themes begin
-        am4core.useTheme(am4themes_animated);
-        // Themes end
+          // Add data
+          "data": ${JSON.stringify(this.props.data)},
 
-        var chart = am4core.create("chartdiv", am4charts.PieChart);
-        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-        chart.data = ${JSON.stringify(this.props.data)};
-        chart.radius = am4core.percent(70);
-        chart.innerRadius = am4core.percent(40);
-        chart.startAngle = 0;
-        chart.endAngle = 360;  
 
-        var series = chart.series.push(new am4charts.PieSeries());
-        series.dataFields.value = "value";
-        series.dataFields.category = "country";
+        }, "chartdiv", am4charts.PieChart);
+      </script>
+    `;
+    
+    const tags = `
+      <div>
+        <p id="log">HELLO</p>
+        <div id="chartdiv"></div>
+      </div>
+    `;
 
-        series.slices.template.cornerRadius = 10;
-        series.slices.template.innerCornerRadius = 7;
-        series.slices.template.draggable = false;
-        series.slices.template.inert = false;
-        series.alignLabels = false;
-
-        series.hiddenState.properties.startAngle = 90;
-        series.hiddenState.properties.endAngle = 90;
-
-      </script>`;
+    const html = style + tags + imports + script;
 
     return (
       <View style={{ width: `100%`, height: 300 }}>
@@ -62,6 +60,11 @@ export default class AmCharts extends Component {
           originWhitelist={['*']}
           source={{ html }}
           javaScriptEnabled={true}
+          useWebKit={true}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          startInLoadingState={true}
+          renderLoading={() => <ActivityIndicator animating={true} />}
         />
       </View>
 
