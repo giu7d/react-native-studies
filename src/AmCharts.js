@@ -5,16 +5,30 @@ import { ActivityIndicator } from 'react-native-paper';
 
 export default class AmCharts extends Component {
 
+  _webview = null;
+
+  componentDidMount() {
+    this._webview.injectJavaScript(`
+      var chart = am4core.createFromConfig({
+        "series": [{
+          "type": "PieSeries",
+          "dataFields": {
+            "value": "value",
+            "category": "country"
+          }
+        }],
+        "data": ${JSON.stringify(this.props.data)},
+      }, "chartdiv", am4charts.PieChart);
+    `);
+  }
+
+  componentDidUpdate() {
+    this._webview.injectJavaScript(`
+      chart.data =  ${JSON.stringify(this.props.data)}
+    `);    
+  }
+
   render() {
-
-    const style = `
-      <style>
-        #chartdiv {
-          width: 100%;
-        }
-      </style>
-    `;
-
     const imports = `
       <script>
         document.getElementById("log").innerHTML = "Imports #" + Math.floor(Math.random() * 100000);      
@@ -23,40 +37,23 @@ export default class AmCharts extends Component {
       <script src="https://www.amcharts.com/lib/4/charts.js"></script>
       <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
     `;
-    
-    const script = `
-      <script>
-        // Create chart instance in one go
-        var chart = am4core.createFromConfig({
-          // Create pie series
-          "series": [{
-            "type": "PieSeries",
-            "dataFields": {
-              "value": "value",
-              "category": "country"
-            }
-          }],
-
-          // Add data
-          "data": ${JSON.stringify(this.props.data)},
-
-
-        }, "chartdiv", am4charts.PieChart);
-      </script>
-    `;
-    
     const tags = `
+      <style>
+        #chartdiv {
+          width: 100%;
+        }
+      </style>
       <div>
         <p id="log">HELLO</p>
         <div id="chartdiv"></div>
       </div>
     `;
-
-    const html = style + tags + imports + script;
+    const html = tags + imports;
 
     return (
       <View style={{ width: `100%`, height: 300 }}>
         <WebView
+          ref={ref => (this._webview = ref)}
           originWhitelist={['*']}
           source={{ html }}
           javaScriptEnabled={true}
