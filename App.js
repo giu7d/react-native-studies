@@ -5,8 +5,7 @@ import {
   FlatList,
   ScrollView,
   Dimensions,
-  Platform,
-  Animated
+  Platform
 } from "react-native";
 import {
   Appbar,
@@ -45,27 +44,19 @@ function App() {
 }
 
 class Content extends Component {
-  // Animation
-  _scrollValue = new Animated.Value(0);
-
   state = {
     data: ["Project", "About", "Reviews", "Community", "Files"],
     dataIndex: 0
   };
 
   _flatlistRef = React.createRef();
+  _flatlistMenuRef = React.createRef();
 
   _viewabilityConfig = {
     itemVisiblePercentThreshold: 45
   };
 
   _IOS = Platform.OS === "ios";
-
-  _onViewableItemsChanged = info => {
-    const { index = 0 } = info.viewableItems[0];
-
-    this.setState({ dataIndex: index });
-  };
 
   _itemLayout = (data, index) => ({
     length: screenWidth,
@@ -86,15 +77,20 @@ class Content extends Component {
         index -= 1;
       }
     } else {
-      if (speed < -1 && dataIndex < data.length - 1) {
+      if (speed < -1 && index < data.length - 1) {
         index += 1;
       }
-      if (speed > 1 && dataIndex > 0) {
+      if (speed > 1 && index > 0) {
         index -= 1;
       }
     }
 
     this._flatlistRef.current.scrollToIndex({
+      index: index,
+      animated: true,
+      viewPosition: 0.5
+    });
+    this._flatlistMenuRef.current.scrollToIndex({
       index: index,
       animated: true,
       viewPosition: 0.5
@@ -108,6 +104,13 @@ class Content extends Component {
       animated: true,
       viewPosition: 0.5
     });
+
+    this._flatlistMenuRef.current.scrollToIndex({
+      index: index,
+      animated: true,
+      viewPosition: 0.5
+    });
+
     this.setState({ dataIndex: index });
   };
 
@@ -118,6 +121,7 @@ class Content extends Component {
       <View style={styles.flatListContainer}>
         {/* Menu */}
         <FlatList
+          ref={this._flatlistMenuRef}
           style={styles.flatListMenu}
           data={data}
           extraData={dataIndex}
@@ -125,19 +129,6 @@ class Content extends Component {
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => (
-            // <Animated.View
-            //   style={[
-            //     {
-            //       backgroundColor: this._scrollValue.interpolate({
-            //         inputRange: [0, screenWidth * index + dataIndex],
-            //         outputRange: ["#CCC", DefaultTheme.colors.primary],
-            //         extrapolate: "clamp"
-            //       }),
-            //       marginLeft: 11
-            //     },
-            //     styles.indicator
-            //   ]}
-            // />
             <ListButton
               style={styles.flatListItem}
               isSelected={index === dataIndex}
@@ -148,11 +139,6 @@ class Content extends Component {
         />
         {/* Content */}
         <FlatList
-          onScroll={Animated.event([
-            {
-              nativeEvent: { contentOffset: { x: this._scrollValue } }
-            }
-          ])}
           ref={this._flatlistRef}
           style={styles.flatListContent}
           data={data}
@@ -160,12 +146,11 @@ class Content extends Component {
           horizontal
           showsHorizontalScrollIndicator={false}
           getItemLayout={this._itemLayout}
-          onViewableItemsChanged={this._onViewableItemsChanged}
           viewabilityConfig={this._viewabilityConfig}
           onScrollEndDrag={this._onScrollEndDrag}
           decelerationRate="fast"
           bounces={true}
-          snapToInterval={screenWidth}
+          pagingEnabled={false}
           renderItem={({ item, index }) => (
             <ScrollView style={styles.contentContainer}>
               <Paragraph>{item}</Paragraph>
@@ -181,7 +166,7 @@ function ListButton({ title, onPress, isSelected }) {
   return (
     <View>
       {isSelected ? (
-        <Button mode={"contained"} onPress={onPress}>
+        <Button style={{ elevation: 0 }} mode={"contained"} onPress={onPress}>
           {title}
         </Button>
       ) : (
@@ -220,11 +205,6 @@ const styles = StyleSheet.create({
   },
   flatListItem: {
     marginHorizontal: 14
-  },
-  indicator: {
-    height: 7,
-    width: 7,
-    borderRadius: 2
   }
 });
 
