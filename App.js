@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary
   },
   bottomSheetHeader: {
-    height: 48,
+    height: 54,
     borderTopRightRadius: 24,
     borderTopLeftRadius: 24,
     backgroundColor: theme.colors.background,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background
   },
   headerBar: {
-    width: "50%",
+    width: "20%",
     borderTopColor: theme.colors.disabled,
     borderTopWidth: 1
   }
