@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Platform } from "react-native";
+import { View, Platform } from "react-native";
 import { withTheme } from "react-native-paper";
 import Page from "./Page";
 import Menu from "./Menu/Menu";
@@ -31,7 +31,7 @@ class Paginator extends Component {
     const speed = event.nativeEvent.velocity.x;
     let index = dataIndex;
 
-    if (this._IOS) {
+    if (this.IOS) {
       if (speed > 1 && index < data.length - 1) {
         index += 1;
       }
@@ -75,9 +75,7 @@ class Paginator extends Component {
     const { data, theme } = this.props;
 
     return (
-      <View
-        style={[{ backgroundColor: theme.colors.background }, styles.container]}
-      >
+      <View style={{ backgroundColor: theme.colors.background }}>
         {/* Menu */}
         <Menu
           reference={this._menuRef}
@@ -97,12 +95,5 @@ class Paginator extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    borderTopRightRadius: 14,
-    borderTopLeftRadius: 14
-  }
-});
 
 export default withTheme(Paginator);

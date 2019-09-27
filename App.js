@@ -1,21 +1,13 @@
 import React, { Component } from "react";
+import { StyleSheet, View, Dimensions } from "react-native";
 import {
-  StyleSheet,
-  View,
-  FlatList,
-  ScrollView,
-  Dimensions,
-  Platform
-} from "react-native";
-import {
-  Appbar,
   Provider as PaperProvider,
   DefaultTheme,
-  Button,
   Paragraph
 } from "react-native-paper";
-import Menu from "./src/components/Paginator/Menu/Menu";
+import AppBar from "./src/components/AppBar";
 import Paginator from "./src/components/Paginator/Paginator";
+import BottomSheet from "reanimated-bottom-sheet";
 
 const theme = {
   ...DefaultTheme,
@@ -34,15 +26,22 @@ function App() {
   return (
     <PaperProvider theme={theme}>
       <View style={styles.container}>
-        {/* AppBar */}
-        <Appbar.Header>
-          <Appbar.BackAction onPress={() => {}} />
-          <Appbar.Content title="Eazy App" />
-          <Appbar.Action icon="search" onPress={() => {}} />
-          <Appbar.Action icon="more-vert" onPress={() => {}} />
-        </Appbar.Header>
-        {/* Content */}
-        <Paginator data={data} pageWidth={screenWidth} />
+        <AppBar />
+        <BottomSheet
+          snapPoints={["30%", "90%"]}
+          enabledInnerScrolling={true}
+          enabledContentGestureInteraction={false}
+          renderHeader={() => (
+            <View style={styles.bottomSheetHeader}>
+              <View style={styles.headerBar}></View>
+            </View>
+          )}
+          renderContent={() => (
+            <View style={styles.bottomSheetContent}>
+              <Paginator data={data} pageWidth={screenWidth} />
+            </View>
+          )}
+        />
       </View>
     </PaperProvider>
   );
@@ -52,6 +51,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.primary
+  },
+  bottomSheetHeader: {
+    height: 48,
+    borderTopRightRadius: 24,
+    borderTopLeftRadius: 24,
+    backgroundColor: theme.colors.background,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  bottomSheetContent: {
+    backgroundColor: theme.colors.background
+  },
+  headerBar: {
+    width: "50%",
+    borderTopColor: theme.colors.disabled,
+    borderTopWidth: 1
   }
 });
 
