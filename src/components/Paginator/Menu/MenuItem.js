@@ -1,20 +1,19 @@
 import React from "react";
 import { View } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, withTheme } from "react-native-paper";
 import PropTypes from "prop-types";
 
-function MenuItem({ title, onPress, isSelected }) {
+function MenuItem({ title, onPress, isSelected, theme }) {
   return (
     <View>
-      {isSelected ? (
-        <Button style={{ elevation: 0 }} mode={"contained"} onPress={onPress}>
-          {title}
-        </Button>
-      ) : (
-        <Button color="#333" onPress={onPress}>
-          {title}
-        </Button>
-      )}
+      <Button
+        style={{ elevation: 0 }}
+        mode={isSelected ? "contained" : "text"}
+        color={isSelected ? theme.colors.primary : theme.colors.text}
+        onPress={onPress}
+      >
+        {title}
+      </Button>
     </View>
   );
 }
@@ -25,4 +24,4 @@ MenuItem.propTypes = {
   onPress: PropTypes.func.isRequired
 };
 
-export default MenuItem;
+export default withTheme(MenuItem);

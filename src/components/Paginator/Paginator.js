@@ -73,20 +73,22 @@ class Paginator extends Component {
   render() {
     const { dataIndex } = this.state;
     const { data, theme } = this.props;
+    const title = data.map(el => el.title);
+    const screen = data.map(el => el.screen);
 
     return (
       <View style={{ backgroundColor: theme.colors.background }}>
         {/* Menu */}
         <Menu
           reference={this._menuRef}
-          data={data}
+          data={title}
           dataIndex={dataIndex}
           onPress={this._navigateToIndex}
         />
         {/* Pages */}
         <Page
           reference={this._pageRef}
-          data={data}
+          data={screen}
           getItemLayout={this._itemLayout}
           viewabilityConfig={this.VIEW_ABILITY_CONFIG}
           onScrollEndDrag={this._onScrollEnd}

@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   menu: {
     marginVertical: 24,
     marginHorizontal: 14,
-    height: 56
+    height: 54
   },
   menuItem: {
     marginHorizontal: 14
